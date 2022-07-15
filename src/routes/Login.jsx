@@ -1,14 +1,41 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react"
+import {doc, getDoc} from 'firebase/firestore';
+import { db } from "../firebase";
+import {login} from '../features/users/userSlice'
+import { useEffect, useState } from "react";
 import { auth } from "../firebase";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../features/users/userSlice"
 
 export default function Login(){
   let [username, setUsername] = useState("asdf@asdf.com");
   let [password, setPassword] = useState("asdfasdf");
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleLogin = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, username, password).then(alert("Logged in")).then(console.log(auth.currentUser));
+    signInWithEmailAndPassword(auth, username, password)
+    .then(async(userAuth) => {
+      const userRef = doc(db, "users", userAuth.user.uid);
+      const userSnap = await getDoc(userRef);
+      if(userSnap.exists()){
+        dispatch(
+          login({
+            uid: userAuth.user.uid,
+            email: userAuth.user.email,
+            name: userSnap.data().name,
+            permissions: userSnap.data().permissions,
+            roles: userSnap.data().roles
+          })
+        )
+      }
+    }).then(() => {
+      navigate('/dashboard')
+    })
   }
   return(
     <>
