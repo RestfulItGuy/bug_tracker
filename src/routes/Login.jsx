@@ -2,12 +2,10 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import {doc, getDoc} from 'firebase/firestore';
 import { db } from "../firebase";
 import {login} from '../features/users/userSlice'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { auth } from "../firebase";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../features/users/userSlice"
 
 export default function Login(){
   let [username, setUsername] = useState("asdf@asdf.com");
