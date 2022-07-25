@@ -8,10 +8,8 @@ import { selectCurrentUser, login } from "./features/userSlice";
 import { auth, db } from "./firebase";
 
 import Dashboard from './routes/Dashboard';
-import Create from "./routes/bugs/Create";
 import Menu from "./components/Menu/Menu";
 import Login from "./routes/Login";
-import Admin from './routes/Admin';
 
 import { useEffect } from "react";
 import NotFound from "./routes/NotFound";
@@ -59,16 +57,20 @@ export default function App(){
   return(
     <>
       <BrowserRouter>
-        {currentUser ? <Menu /> : <></>}
-        <Routes>
-          <Route element={<PrivateRoute isAllowed={!!currentUser} redirectTo='/login' />}>
-            <Route path="/" element={<Dashboard />} />
-          </Route>
-          <Route element={<PublicRoute isAllowed={!!currentUser} />}>
-            <Route path="/login" element={<Login />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="col leftCol">
+          {currentUser ? <Menu /> : <></>}
+        </div>
+        <div className="col rightCol">
+          <Routes>
+            <Route element={<PrivateRoute isAllowed={!!currentUser} redirectTo='/login' />}>
+              <Route path="/" element={<Dashboard />} />
+            </Route>
+            <Route element={<PublicRoute isAllowed={!!currentUser} />}>
+              <Route path="/login" element={<Login />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </BrowserRouter>
     </>
   )
