@@ -1,17 +1,25 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { auth } from '../../firebase';
+
+import { logout } from '../../features/userSlice'; 
 
 export default function Menu(){
-  //We set user on successful login
-  let user;
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    auth.signOut().then(() => {
+      dispatch(logout());
+    })
+  }
+  
   return(
-    user ?
     <nav>
       <ul>
-        <Link to='/dashboard'>Dashboard</Link>
+        <Link to='/'>Dashboard</Link>
         <Link to='/admin'>Admin</Link>
-        <button>Logout</button>
+        <button onClick={handleLogout}>Logout</button>
       </ul>
-    </nav> 
-    : <></>
+    </nav>
   )
 }

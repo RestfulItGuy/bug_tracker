@@ -11,5 +11,5 @@ export const PublicRoute = ({isAllowed, children}) => {
   if(!isAllowed){
     return children ? children : <Outlet />
   }
-  return <Navigate to='/dashboard' replace />
+  return <Navigate to='/' replace />
 }
